@@ -48,11 +48,12 @@ public class ApplicationStart {
 
 	}
 
-	private static  ApplicationBootContext buildApplicationBootContext(String context,int port,File appdir){
+	private static  ApplicationBootContext buildApplicationBootContext(String context,int port,File appdir,String docBase){
 		DefaultApplicationBootContext applicationBootContext = new DefaultApplicationBootContext();
 		applicationBootContext.setAppdir(appdir);
 		applicationBootContext.setContext(context);
 		applicationBootContext.setPort(port);
+		applicationBootContext.setDocBase(docBase);
 		return applicationBootContext;
 	}
 
@@ -62,33 +63,37 @@ public class ApplicationStart {
 		try {
 			initApplicationListeners();
 			// 服务器的监听端口
-			String port = CommonLauncher.getProperty("port", "8080");
-			if (port.equals(""))
-				port = "8080";
-			String contextPath = CommonLauncher.getProperty("context",
-					"");
+			String port_ = System.getProperty("port","8080");
+			String port = CommonLauncher.getProperty("port", port_);
+
+			String contextPath_ = System.getProperty("contextPath","");
+			String contextPath = CommonLauncher.getProperty("contextPath",
+					contextPath_);
 			if (contextPath.equals(""))
 				;
 			else if(!contextPath.startsWith("/")){
 				contextPath = "/"+contextPath;
 			}
+			String docBase_ = System.getProperty("docBase","./WebRoot");
+			String docBase = CommonLauncher.getProperty("docBase",docBase_);
 
 			int p = Integer.parseInt(port);
 
-			applicationBootContext = buildApplicationBootContext(  contextPath,  p,  appdir);
+			applicationBootContext = buildApplicationBootContext(  contextPath,  p,  appdir,docBase);
 			beforeStartHandler(  applicationBootContext);
 			Server server = new Server(p);
 			// 关联一个已经存在的上下文
 			WebAppContext context = new WebAppContext();
 			// 设置描述符位置
-			context.setDescriptor("./WebRoot/WEB-INF/web.xml");
+			//context.setDescriptor("./"+webroot+"/WEB-INF/web.xml");
 			// 设置Web内容上下文路径
-			context.setResourceBase("./WebRoot");
+
+			context.setResourceBase(docBase);
 			// 设置上下文路径
 			context.setContextPath(contextPath);
 			context.setParentLoaderPriority(true);
 			ContextHandlerCollection contexts = new ContextHandlerCollection();
-
+			log.info("WebAppContext:"+context.toString());
 
 			contexts.setHandlers(new Handler[] { context });
 

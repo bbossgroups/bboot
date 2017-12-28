@@ -33,4 +33,8 @@ public interface ApplicationBootContext {
 	public String getServerStatus() ;
 	public void setServerStatus(String serverStatus) ;
 
+	public String getDocBase() ;
+
+	public void setDocBase(String docBase);
+
 }

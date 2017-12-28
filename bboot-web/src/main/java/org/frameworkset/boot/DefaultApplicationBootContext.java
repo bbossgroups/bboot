@@ -20,9 +20,18 @@ public class DefaultApplicationBootContext implements ApplicationBootContext {
 	private String context;
 	private int port;
 	private File appdir;
+	private String docBase;
 	private String serverStatus ;
 	public String getContext() {
 		return context;
+	}
+
+	public String getDocBase() {
+		return docBase;
+	}
+
+	public void setDocBase(String docBase) {
+		this.docBase = docBase;
 	}
 
 	public void setContext(String context) {
