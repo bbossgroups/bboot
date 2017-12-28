@@ -1,0 +1,53 @@
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+
+		}
+		resources {
+			srcDir 'src/main/resources'
+			srcDir 'src/main/java'  exclude '**/*.java'
+		}
+
+	}
+	test {
+		java {
+			srcDir 'src/test/java'
+
+		}
+		resources {
+			srcDir 'src/test/resources'
+			srcDir 'src/test/java'  exclude '**/*.java'
+		}
+
+	}
+
+}
+
+
+
+dependencies {
+	compile project(':bboot-starter')
+
+
+	compile (
+			[group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.8.v20171121', transitive: true],
+			[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.8.v20171121', transitive: true],
+			[group: 'org.eclipse.jetty', name: 'jetty-jmx', version: '9.4.8.v20171121', transitive: true],
+			[group: 'org.eclipse.jetty', name: 'jetty-servlets', version: '9.4.8.v20171121', transitive: true],
+			[group: 'org.eclipse.jetty', name: 'apache-jsp', version: '9.4.8.v20171121', transitive: true],
+			[group: 'org.eclipse.jetty', name: 'apache-jstl', version: '9.4.8.v20171121', transitive: true],
+	)
+
+}
+
+
+
+	
+	
+
+
+
+
+

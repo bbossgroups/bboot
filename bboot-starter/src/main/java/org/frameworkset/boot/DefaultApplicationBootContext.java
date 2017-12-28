@@ -22,6 +22,7 @@ public class DefaultApplicationBootContext implements ApplicationBootContext {
 	private File appdir;
 	private String docBase;
 	private String serverStatus ;
+	private String host;
 	public String getContext() {
 		return context;
 	}
@@ -29,7 +30,13 @@ public class DefaultApplicationBootContext implements ApplicationBootContext {
 	public String getDocBase() {
 		return docBase;
 	}
+	public String getHost(){
+		return host;
+	}
 
+	public void setHost(String host){
+		this.host = host;
+	}
 	public void setDocBase(String docBase) {
 		this.docBase = docBase;
 	}

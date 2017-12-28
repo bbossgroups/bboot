@@ -36,5 +36,7 @@ public interface ApplicationBootContext {
 	public String getDocBase() ;
 
 	public void setDocBase(String docBase);
+	public String getHost();
 
+	public void setHost(String host);
 }
