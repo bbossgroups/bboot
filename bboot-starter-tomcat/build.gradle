@@ -29,16 +29,21 @@ sourceSets {
 
 dependencies {
 	compile project(':bboot-starter')
-
-
 	compile (
-			[group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.8.v20171121', transitive: true],
-			[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.8.v20171121', transitive: true],
-			[group: 'org.eclipse.jetty', name: 'jetty-jmx', version: '9.4.8.v20171121', transitive: true],
-			[group: 'org.eclipse.jetty', name: 'jetty-servlets', version: '9.4.8.v20171121', transitive: true],
-			[group: 'org.eclipse.jetty', name: 'apache-jsp', version: '9.4.8.v20171121', transitive: true],
-			[group: 'org.eclipse.jetty', name: 'apache-jstl', version: '9.4.8.v20171121', transitive: true],
+			[group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: "${tomcat_version}", transitive: true],
+
+			[group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: "${tomcat_version}", transitive: true],
+
+			[group: 'org.apache.tomcat', name: 'tomcat-jasper', version: "${tomcat_version}", transitive: true],
+
+			[group: 'org.apache.tomcat', name: 'tomcat-jasper-el', version: "${tomcat_version}", transitive: true],
+
+			[group: 'org.apache.tomcat', name: 'tomcat-jsp-api', version: "${tomcat_version}", transitive: true],
+			[group: 'org.apache.tomcat.embed', name: 'tomcat-embed-logging-juli', version: "8.5.2", transitive: true]
+
+
 	)
+
 
 }
 

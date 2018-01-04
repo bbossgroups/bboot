@@ -1,94 +1,171 @@
 package org.frameworkset.boot;
 
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.webapp.Configuration;
-import org.eclipse.jetty.webapp.WebAppContext;
+
+import org.apache.catalina.Context;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleEvent;
+import org.apache.catalina.LifecycleListener;
+import org.apache.catalina.connector.Connector;
+import org.apache.catalina.core.StandardContext;
+import org.apache.catalina.core.StandardThreadExecutor;
+import org.apache.catalina.startup.Constants;
+import org.apache.catalina.startup.ContextConfig;
+import org.apache.catalina.startup.Tomcat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletContext;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class ApplicationStart extends BaseApplicationStart{
 	private static Logger log = LoggerFactory.getLogger(ApplicationStart.class);
-	private Server server;
+	private Tomcat tomcat = null;
+	private static final String PROP_PROTOCOL = "org.apache.coyote.http11.Http11NioProtocol";
+
+	private static final String DEFAULT_CHARSET = "UTF-8";
+
 	public ApplicationStart() {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	protected void startContainer(ApplicationBootContext applicationBootContext)  throws Exception{
-		QueuedThreadPool threadPool = new QueuedThreadPool();
-		threadPool.setIdleTimeout(getThreadPoolIdleTimeout());
-		threadPool.setMinThreads(getMinThreads());
-		threadPool.setMaxThreads(getMaxThreads());
-		Server server = new Server(threadPool);
-		ServerConnector connector = new ServerConnector(server);
-		connector.setHost(applicationBootContext.getHost());
-		connector.setPort(applicationBootContext.getPort());
-		connector.setIdleTimeout(getIdleTimeout());
-		server.setConnectors(new Connector[]{connector});
-
-		// 关联一个已经存在的上下文
-		WebAppContext context = new WebAppContext();
-		// 设置描述符位置
-		//context.setDescriptor("./"+webroot+"/WEB-INF/web.xml");
-		// 设置Web内容上下文路径
-
-		context.setResourceBase(applicationBootContext.getDocBase());
-		// 设置上下文路径
-		context.setContextPath(applicationBootContext.getContext());
-		context.setParentLoaderPriority(true);
-		ContextHandlerCollection contexts = new ContextHandlerCollection();
-		log.info("WebAppContext:"+context.toString());
-
-		contexts.setHandlers(new Handler[] { context });
-
-		// This webapp will use jsps and jstl. We need to enable the
-		// AnnotationConfiguration in order to correctly
-		// set up the jsp container
-		Configuration.ClassList classlist = Configuration.ClassList
-				.setServerDefault( server );
-		classlist.addBefore(
-				"org.eclipse.jetty.webapp.JettyWebXmlConfiguration",
-				"org.eclipse.jetty.annotations.AnnotationConfiguration" );
-
-		// Set the ContainerIncludeJarPattern so that jetty examines these
-		// container-path jars for tlds, web-fragments etc.
-		// If you omit the jar that contains the jstl .tlds, the jsp engine will
-		// scan for them instead.
-		context.setAttribute(
-				"org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
-				".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$" );
-
-
-
-		// Configure a LoginService.
-		// Since this example is for our test webapp, we need to setup a
-		// LoginService so this shows how to create a very simple hashmap based
-		// one. The name of the LoginService needs to correspond to what is
-		// configured in the webapp's web.xml and since it has a lifecycle of
-		// its own we register it as a bean with the Jetty server object so it
-		// can be started and stopped according to the lifecycle of the server
-		// itself.
-//			HashLoginService loginService = new HashLoginService();
-//			loginService.setName( "Test Realm" );
-//			loginService.setConfig( "src/test/resources/realm.properties" );
-//			server.addBean( loginService );
-
-		server.setHandler(contexts);
-
-
-		// 启动
-		server.start();
-		applicationBootContext.setServerStatus(server.getState());
+	private URL getWebappConfigFileFromDirectory(File docBase) {
+		URL result = null;
+		File webAppContextXml = new File(docBase, Constants.ApplicationWebXml);
+		if (webAppContextXml.exists()) {
+			try {
+				result = webAppContextXml.toURI().toURL();
+			} catch (MalformedURLException e) {
+				log.info(
+						"Unable to determine web application context.xml " + docBase, e);
+			}
+		}
+		return result;
 	}
 
 	@Override
+	protected void startContainer(ApplicationBootContext applicationBootContext)  throws Exception{
+
+
+		tomcat = new Tomcat();
+//		tomcat.setPort(this.getPort());
+		tomcat.setBaseDir(".");
+//		tomcat.setBaseDir(applicationBootContext.getDocBase());
+
+		Connector connector = new Connector(PROP_PROTOCOL);
+		connector.setPort(getPort());
+		connector.setURIEncoding(DEFAULT_CHARSET);
+
+		// 设置一下最大线程数
+		this.tomcat.getService().addConnector(connector);
+		StandardThreadExecutor executor = new StandardThreadExecutor();
+		executor.setMaxThreads(this.getMaxThreads());
+
+		connector.getService().addExecutor(executor);
+
+		this.tomcat.setConnector(connector);
+
+		this.tomcat.setHostname(getHost());
+		this.tomcat.getEngine().setBackgroundProcessorDelay(30);
+
+		tomcat.getHost().setAutoDeploy(false);
+		tomcat.getHost().setAppBase(".");
+		String contextPath = applicationBootContext.getContext();
+		StandardContext context = new StandardContext();
+		context.setParentClassLoader(Thread.currentThread().getContextClassLoader());
+		context.setPath(contextPath);
+		context.setDelegate(false);
+		context.setDocBase(applicationBootContext.getDocBase());
+		context.setAltDDName(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
+
+		context.setConfigFile(getWebappConfigFileFromDirectory(new File(applicationBootContext.getDocBase())));
+		ContextConfig contextConfig = new ContextConfig();
+
+		context.addLifecycleListener(contextConfig );
+		context.addLifecycleListener(new Tomcat.DefaultWebXmlListener());
+		context.addLifecycleListener(new Tomcat.FixContextListener());
+
+//		context.addLifecycleListener(new StoreMergedWebXmlListener(applicationBootContext));
+//		context.setDefaultWebXml(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
+//		context.addWatchedResource(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
+		log.info(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
+//
+//		WebResourceRoot resources = new StandardRoot(context);
+//		resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
+//				applicationBootContext.getDocBase(), "/"));
+//		context.setResources(resources);
+		tomcat.getHost().addChild(context);
+
+
+
+
+		tomcat.start();
+
+		log.info("configuring app with basedir: " + applicationBootContext.getDocBase());
+
+		applicationBootContext.setServerStatus("started");
+	}
+	private static class StoreMergedWebXmlListener implements LifecycleListener {
+		private ApplicationBootContext applicationBootContext;
+		private static final String MERGED_WEB_XML = "org.apache.tomcat.util.scan.MergedWebXml";
+
+		public StoreMergedWebXmlListener(ApplicationBootContext applicationBootContext){
+			this.applicationBootContext = applicationBootContext;
+		}
+
+		@Override
+		public void lifecycleEvent(LifecycleEvent event) {
+			if (event.getType().equals(Lifecycle.CONFIGURE_START_EVENT)) {
+				onStart((Context) event.getLifecycle());
+			}
+		}
+
+		private void onStart(Context context) {
+			ServletContext servletContext = context.getServletContext();
+
+			if (servletContext.getAttribute(MERGED_WEB_XML) == null) {
+				servletContext.setAttribute(MERGED_WEB_XML, getEmptyWebXml());
+			}
+		}
+
+		private String getEmptyWebXml() {
+			InputStream stream = null;
+			try {
+				try {
+					stream = new FileInputStream(new File(applicationBootContext.getDocBase()+"/WEB-INF/web.xml"));
+					if (stream == null) {
+						throw new IllegalArgumentException("Unable to read "+applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
+					}
+					StringBuilder out = new StringBuilder();
+					InputStreamReader reader = new InputStreamReader(stream, DEFAULT_CHARSET);
+					char[] buffer = new char[1024 * 4];
+					int bytesRead = -1;
+					while ((bytesRead = reader.read(buffer)) != -1) {
+						out.append(buffer, 0, bytesRead);
+					}
+					return out.toString();
+				} finally {
+					stream.close();
+				}
+			} catch (IOException ex) {
+				throw new IllegalStateException(ex);
+			}
+		}
+
+	}
+	@Override
 	protected void afterStartContainer(ApplicationBootContext applicationBootContext) throws Exception{
-		server.join();
+		Thread tomcatAwaitThread = new Thread("container-1" ) {
+			@Override
+			public void run() {
+				ApplicationStart.this.tomcat.getServer().await();
+			}
+		};
+		tomcatAwaitThread.setContextClassLoader(getClass().getClassLoader());
+		tomcatAwaitThread.setDaemon(false);
+		tomcatAwaitThread.start();
+
 	}
 
 

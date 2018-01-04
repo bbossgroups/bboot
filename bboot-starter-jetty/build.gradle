@@ -32,12 +32,12 @@
 
 		compile (
 
-				[group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.8.v20171121', transitive: true],
-				[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.8.v20171121', transitive: true],
-				[group: 'org.eclipse.jetty', name: 'jetty-jmx', version: '9.4.8.v20171121', transitive: true],
-				[group: 'org.eclipse.jetty', name: 'jetty-servlets', version: '9.4.8.v20171121', transitive: true],
-				[group: 'org.eclipse.jetty', name: 'apache-jsp', version: '9.4.8.v20171121', transitive: true],
-				[group: 'org.eclipse.jetty', name: 'apache-jstl', version: '9.4.8.v20171121', transitive: true],
+				[group: 'org.eclipse.jetty', name: 'jetty-server', version: "${jetty_version}", transitive: true],
+				[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: "${jetty_version}", transitive: true],
+				[group: 'org.eclipse.jetty', name: 'jetty-jmx', version: "${jetty_version}", transitive: true],
+				[group: 'org.eclipse.jetty', name: 'jetty-servlets', version: "${jetty_version}", transitive: true],
+				[group: 'org.eclipse.jetty', name: 'apache-jsp', version: "${jetty_version}", transitive: true],
+				[group: 'org.eclipse.jetty', name: 'apache-jstl', version: "${jetty_version}", transitive: true],
 
 
 		)
