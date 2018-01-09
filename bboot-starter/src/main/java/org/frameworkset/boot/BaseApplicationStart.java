@@ -52,24 +52,27 @@ public abstract class BaseApplicationStart {
 		return applicationBootContext;
 	}
 	protected   int getThreadPoolIdleTimeout(){
-		String threadPoolIdleTimeout_ = System.getProperty("threadPoolIdleTimeout","60000");
-		String threadPoolIdleTimeout = CommonLauncher.getProperty("threadPoolIdleTimeout", threadPoolIdleTimeout_);
-		int p = Integer.parseInt(threadPoolIdleTimeout.trim());
-		return p;
+//		String threadPoolIdleTimeout_ = System.getProperty("threadPoolIdleTimeout","60000");
+//		String threadPoolIdleTimeout = CommonLauncher.getProperty("threadPoolIdleTimeout", threadPoolIdleTimeout_);
+//		int p = Integer.parseInt(threadPoolIdleTimeout.trim());
+//		return p;
+		return _getIntProperty("threadPoolIdleTimeout","60000");
 	}
 
 	protected   int getMinThreads(){
-		String minThreads_ = System.getProperty("minThreads","10");
-		String minThreads = CommonLauncher.getProperty("minThreads", minThreads_);
-		int p = Integer.parseInt(minThreads.trim());
-		return p;
+//		String minThreads_ = System.getProperty("minThreads","10");
+//		String minThreads = CommonLauncher.getProperty("minThreads", minThreads_);
+//		int p = Integer.parseInt(minThreads.trim());
+//		return p;
+		return _getIntProperty("minThreads","10");
 	}
 
 	protected   int getMaxThreads(){
-		String maxThreads_ = System.getProperty("maxThreads","200");
-		String maxThreads = CommonLauncher.getProperty("maxThreads", maxThreads_);
-		int p = Integer.parseInt(maxThreads.trim());
-		return p;
+//		String maxThreads_ = System.getProperty("maxThreads","200");
+//		String maxThreads = CommonLauncher.getProperty("maxThreads", maxThreads_);
+//		int p = Integer.parseInt(maxThreads.trim());
+//		return p;
+		return _getIntProperty("maxThreads","200");
 	}
 
 	protected   int getIdleTimeout(){
@@ -80,9 +83,10 @@ public abstract class BaseApplicationStart {
 //		return p;
 	}
 	protected   String getContextPath(){
-		String contextPath_ = System.getProperty("contextPath","");
-		String contextPath = CommonLauncher.getProperty("contextPath",
-				contextPath_);
+//		String contextPath_ = System.getProperty("contextPath","");
+//		String contextPath = CommonLauncher.getProperty("contextPath",
+//				contextPath_);
+		String contextPath = _getStringProperty("contextPath","");
 		if (contextPath.equals(""))
 			;
 		else if(!contextPath.startsWith("/")){
@@ -92,27 +96,51 @@ public abstract class BaseApplicationStart {
 	}
 
 	protected   String getDocBase(){
-		String docBase_ = System.getProperty("docBase","./WebRoot");
-		String docBase = CommonLauncher.getProperty("docBase",docBase_);
-		return docBase;
+//		String docBase_ = System.getProperty("docBase","./WebRoot");
+//		String docBase = CommonLauncher.getProperty("docBase",docBase_);
+//		return docBase;
+		return _getStringProperty("docBase","./WebRoot");
 	}
+	/**
+	 * 先从配置文件获取属性，如果配置文件中没有，则从系统jvm变量中取，如果系统变量中没有，则采用默认值
+	 * @param propertyName
+	 * @param defaultValue
+	 * @return
+	 */
 	private int _getIntProperty(String propertyName,String defaultValue){
 		String idleTimeout_ = System.getProperty(propertyName,defaultValue);
-		String idleTimeout = CommonLauncher.getProperty("idleTimeout", idleTimeout_);
+		String idleTimeout = CommonLauncher.getProperty(propertyName, idleTimeout_);
 		int p = Integer.parseInt(idleTimeout.trim());
 		return p;
 	}
 
+	/**
+	 * 先从配置文件获取属性，如果配置文件中没有，则从系统jvm变量中取，如果系统变量中没有，则采用默认值
+	 * @param propertyName
+	 * @param defaultValue
+	 * @return
+	 */
+	private String _getStringProperty(String propertyName,String defaultValue){
+		String idleTimeout_ = System.getProperty(propertyName,defaultValue);
+		String idleTimeout = CommonLauncher.getProperty(propertyName, idleTimeout_);
+
+		return idleTimeout;
+	}
+
 	protected   int getPort(){
-		String port_ = System.getProperty("port","8080");
-		String port = CommonLauncher.getProperty("port", port_);
-		int p = Integer.parseInt(port.trim());
-		return p;
+//		String port_ = System.getProperty("port","8080");
+//		String port = CommonLauncher.getProperty("port", port_);
+//		int p = Integer.parseInt(port.trim());
+//		return p;
+
+		return _getIntProperty("port","8080");
 	}
 	public   String getHost(){
-		String host_ = System.getProperty("host","127.0.0.1");
-		String host = CommonLauncher.getProperty("host",host_);
-		return host;
+//		String host_ = System.getProperty("host","127.0.0.1");
+//		String host = CommonLauncher.getProperty("host",host_);
+//		return host;
+
+		return _getStringProperty("host","127.0.0.1");
 	}
 	protected abstract void startContainer(ApplicationBootContext applicationBootContext)  throws Exception;
 	protected abstract void afterStartContainer(ApplicationBootContext applicationBootContext)  throws Exception;
