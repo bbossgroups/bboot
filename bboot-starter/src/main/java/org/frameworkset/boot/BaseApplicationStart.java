@@ -73,10 +73,11 @@ public abstract class BaseApplicationStart {
 	}
 
 	protected   int getIdleTimeout(){
-		String idleTimeout_ = System.getProperty("idleTimeout","30000");
-		String idleTimeout = CommonLauncher.getProperty("idleTimeout", idleTimeout_);
-		int p = Integer.parseInt(idleTimeout.trim());
-		return p;
+		return _getIntProperty("idleTimeout","30000");
+//		String idleTimeout_ = System.getProperty("idleTimeout","30000");
+//		String idleTimeout = CommonLauncher.getProperty("idleTimeout", idleTimeout_);
+//		int p = Integer.parseInt(idleTimeout.trim());
+//		return p;
 	}
 	protected   String getContextPath(){
 		String contextPath_ = System.getProperty("contextPath","");
@@ -94,6 +95,12 @@ public abstract class BaseApplicationStart {
 		String docBase_ = System.getProperty("docBase","./WebRoot");
 		String docBase = CommonLauncher.getProperty("docBase",docBase_);
 		return docBase;
+	}
+	private int _getIntProperty(String propertyName,String defaultValue){
+		String idleTimeout_ = System.getProperty(propertyName,defaultValue);
+		String idleTimeout = CommonLauncher.getProperty("idleTimeout", idleTimeout_);
+		int p = Integer.parseInt(idleTimeout.trim());
+		return p;
 	}
 
 	protected   int getPort(){
