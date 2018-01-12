@@ -108,10 +108,9 @@ public abstract class BaseApplicationStart {
 	 * @return
 	 */
 	private int _getIntProperty(String propertyName,String defaultValue){
-		String idleTimeout_ = System.getProperty(propertyName,defaultValue);
-		String idleTimeout = CommonLauncher.getProperty(propertyName, idleTimeout_);
-		int p = Integer.parseInt(idleTimeout.trim());
-		return p;
+
+		return CommonLauncher.getIntProperty(propertyName,defaultValue);
+
 	}
 
 	/**
@@ -121,10 +120,7 @@ public abstract class BaseApplicationStart {
 	 * @return
 	 */
 	private String _getStringProperty(String propertyName,String defaultValue){
-		String idleTimeout_ = System.getProperty(propertyName,defaultValue);
-		String idleTimeout = CommonLauncher.getProperty(propertyName, idleTimeout_);
-
-		return idleTimeout;
+		return CommonLauncher.getProperty(propertyName,defaultValue);
 	}
 
 	protected   int getPort(){
