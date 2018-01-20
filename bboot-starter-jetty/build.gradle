@@ -36,6 +36,7 @@
 				[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: "${jetty_version}", transitive: true],
 				[group: 'org.eclipse.jetty', name: 'jetty-jmx', version: "${jetty_version}", transitive: true],
 				[group: 'org.eclipse.jetty', name: 'jetty-servlets', version: "${jetty_version}", transitive: true],
+				[group: 'org.eclipse.jetty.websocket', name: 'javax-websocket-server-impl', version: "${jetty_version}", transitive: true],
 				[group: 'org.eclipse.jetty', name: 'apache-jsp', version: "${jetty_version}", transitive: true],
 				[group: 'org.eclipse.jetty', name: 'apache-jstl', version: "${jetty_version}", transitive: true],
 

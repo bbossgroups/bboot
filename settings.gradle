@@ -1,3 +1,4 @@
 include 'bboot-starter'
 include 'bboot-starter-jetty'
 include 'bboot-starter-tomcat'
+include 'bboot-starter-undertow'
