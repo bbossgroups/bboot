@@ -29,7 +29,10 @@ public class ApplicationStart extends BaseApplicationStart{
 	public ApplicationStart() {
 		// TODO Auto-generated constructor stub
 	}
-
+	@Override
+	public String getServerType() {
+		return "Tomcat";
+	}
 	private URL getWebappConfigFileFromDirectory(File docBase) {
 		URL result = null;
 		File webAppContextXml = new File(docBase, Constants.ApplicationWebXml);

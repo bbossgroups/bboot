@@ -28,6 +28,11 @@ public class ApplicationStart extends BaseApplicationStart{
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String getServerType() {
+		return "Undertow";
+	}
+
 	private URL getWebappConfigFileFromDirectory(File docBase) {
 		URL result = null;
 //		File webAppContextXml = new File(docBase, Constants.ApplicationWebXml);

@@ -19,6 +19,11 @@ public class ApplicationStart extends BaseApplicationStart{
 	}
 
 	@Override
+	public String getServerType() {
+		return "Jetty";
+	}
+
+	@Override
 	protected void startContainer(ApplicationBootContext applicationBootContext)  throws Exception{
 		QueuedThreadPool threadPool = new QueuedThreadPool();
 		threadPool.setIdleTimeout(getThreadPoolIdleTimeout());

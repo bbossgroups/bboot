@@ -122,6 +122,7 @@ public abstract class BaseApplicationStart {
 	private String _getStringProperty(String propertyName,String defaultValue){
 		return CommonLauncher.getProperty(propertyName,defaultValue);
 	}
+	public abstract  String getServerType();
 
 	protected   int getPort(){
 //		String port_ = System.getProperty("port","8080");
@@ -153,7 +154,7 @@ public abstract class BaseApplicationStart {
 			String docBase = getDocBase();
 			int port = getPort();
 			String host = this.getHost();
-
+			log.info("start "+getServerType()+" server on "+host+":"+port+ " with contextpath "+contextPath);
 			applicationBootContext = buildApplicationBootContext(  contextPath,  port,  appdir,docBase,host);
 
 			beforeStartHandler(  applicationBootContext);
