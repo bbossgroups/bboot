@@ -94,7 +94,7 @@ configure(subprojects) { subproject ->
 
 }
 
-configure([project(":bboot-starter-jetty"),project(":bboot-starter-tomcat"),project(":bboot-starter-undertow")]) { subproject ->
+configure([project(":bboot-starter-jetty"),project(":bboot-starter-jetty8"),project(":bboot-starter-tomcat"),project(":bboot-starter-undertow")]) { subproject ->
 	ext.uploadtocenter=uploadArchivesToMavenCenter.equals("true")
 	if(uploadtocenter)
 	{
