@@ -97,7 +97,7 @@ configure(subprojects) { subproject ->
 
 }
 
-configure([project(":bboot-starter-jetty"),project(":bboot-starter-jetty8"),project(":bboot-starter-tomcat"),project(":bboot-starter-undertow")]) { subproject ->
+configure([project(":bboot-starter"),project(":bboot-starter-jetty"),project(":bboot-starter-jetty8"),project(":bboot-starter-tomcat"),project(":bboot-starter-undertow")]) { subproject ->
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
