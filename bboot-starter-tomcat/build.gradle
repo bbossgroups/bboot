@@ -28,8 +28,8 @@ sourceSets {
 
 
 dependencies {
-	compile project(':bboot-starter')
-	compile (
+	api project(':bboot-starter')
+	api (
 			[group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: "${tomcat_version}", transitive: true],
 
 			[group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: "${tomcat_version}", transitive: true],

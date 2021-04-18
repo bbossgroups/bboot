@@ -28,8 +28,8 @@ sourceSets {
 
 
 dependencies {
-	compile project(':bboot-starter')
-	compile (
+	api project(':bboot-starter')
+	api (
 			[group: 'io.undertow', name: 'undertow-core', version: "${undertow_version}", transitive: true],
 			[group: 'io.undertow', name: 'undertow-servlet', version: "${undertow_version}", transitive: true],
 			[group: 'io.undertow', name: 'undertow-websockets-jsr', version: "${undertow_version}", transitive: true],

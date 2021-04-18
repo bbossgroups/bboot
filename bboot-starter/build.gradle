@@ -30,7 +30,7 @@
 	dependencies {
 		 
 		
-		compile (
+		api (
 
 				[group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25', transitive: true],
 				[group: 'com.bbossgroups', name: 'bboss-util', version: "${bboss_version}", transitive: false],
@@ -60,7 +60,7 @@
 
 		)
 		
-		compile (
+		api (
 
 
 				[group: 'com.bbossgroups', name: 'bboss-taglib', version: "${bboss_version}", transitive: false],
@@ -70,8 +70,8 @@
 				[group: 'jstl', name: 'jstl', version: '1.2', transitive: false],
 
 		)
-		
-		compile (
+
+		api (
 //				[group: 'javax.servlet', name: 'javax.servlet-api', version: "3.0.1", transitive: false],
 				//[group: 'javax.servlet', name: 'jsp-api', version: '2.0', transitive: false],
 				[group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version: '2.3.1', transitive: false],
@@ -80,8 +80,8 @@
 
 		)
 
-		
-		compile (
+
+		api (
 			   [group: 'xml-resolver', name: 'xml-resolver', version: '1.2', transitive: false],
             [group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '2.4.0', transitive: false],
             [group: 'org.apache.ws.xmlschema', name: 'xmlschema-core', version: '2.2.1', transitive: false],

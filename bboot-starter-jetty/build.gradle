@@ -28,9 +28,9 @@
 
 
 	dependencies {
-		compile project(':bboot-starter')
+		api project(':bboot-starter')
 
-		compile (
+		api (
 
 				[group: 'org.eclipse.jetty', name: 'jetty-server', version: "${jetty_version}", transitive: true],
 				[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: "${jetty_version}", transitive: true],
