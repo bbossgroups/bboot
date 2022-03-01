@@ -9,10 +9,14 @@ port=8080
 -DcontextPath=demoproject 
 -Dport=8080
 
-# 构建部署
-前提：安装和配置好最新的gradle版本，下载源码
-## 利用gradle构建发布版本
-gradle install
+# 版本构建方法
+
+gradle clean publishToMavenLocal
+
+需要通过gradle构建发布版本,gradle安装配置参考文档：
+
+https://esdoc.bbossgroups.com/#/bboss-build
+
 
 ## 运行demo
 下载demo
