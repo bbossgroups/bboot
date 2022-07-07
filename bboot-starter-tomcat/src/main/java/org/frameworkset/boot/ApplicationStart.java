@@ -11,6 +11,7 @@ import org.apache.catalina.core.StandardThreadExecutor;
 import org.apache.catalina.startup.Constants;
 import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +74,7 @@ public class ApplicationStart extends BaseApplicationStart{
 		this.tomcat.getEngine().setBackgroundProcessorDelay(30);
 
 		tomcat.getHost().setAutoDeploy(false);
-		tomcat.getHost().setAppBase(".");
+		tomcat.getHost().setAppBase(getDocBase());
 		String contextPath = applicationBootContext.getContext();
 		StandardContext context = new StandardContext();
 		context.setParentClassLoader(Thread.currentThread().getContextClassLoader());
@@ -98,6 +99,7 @@ public class ApplicationStart extends BaseApplicationStart{
 //		resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
 //				applicationBootContext.getDocBase(), "/"));
 //		context.setResources(resources);
+		((StandardJarScanner)context.getJarScanner()).setScanManifest(getScanManifest());
 		tomcat.getHost().addChild(context);
 
 

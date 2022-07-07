@@ -1,7 +1,7 @@
 package org.frameworkset.boot;
 
 import org.frameworkset.boot.event.ApplicationListener;
-import org.frameworkset.runtime.CommonLauncher;
+import org.frameworkset.spi.assemble.PropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public abstract class BaseApplicationStart {
 
 
 	protected  void initApplicationListeners(){
-		String applicationBootListeners = CommonLauncher.getProperty("applicationBootListeners");
+		String applicationBootListeners = PropertiesUtil.getPropertiesContainer().getProperty("web.applicationBootListeners");
 		if(applicationBootListeners != null && !applicationBootListeners.trim().equals("")){
 			String[] applicationBootListeners_ = applicationBootListeners.split(",");
 			ApplicationListener applicationListener = null;
@@ -56,7 +56,7 @@ public abstract class BaseApplicationStart {
 //		String threadPoolIdleTimeout = CommonLauncher.getProperty("threadPoolIdleTimeout", threadPoolIdleTimeout_);
 //		int p = Integer.parseInt(threadPoolIdleTimeout.trim());
 //		return p;
-		return _getIntProperty("threadPoolIdleTimeout","60000");
+		return _getIntProperty("web.threadPoolIdleTimeout",60000);
 	}
 
 	protected   int getMinThreads(){
@@ -64,7 +64,7 @@ public abstract class BaseApplicationStart {
 //		String minThreads = CommonLauncher.getProperty("minThreads", minThreads_);
 //		int p = Integer.parseInt(minThreads.trim());
 //		return p;
-		return _getIntProperty("minThreads","10");
+		return _getIntProperty("web.minThreads",10);
 	}
 
 	protected   int getMaxThreads(){
@@ -72,11 +72,11 @@ public abstract class BaseApplicationStart {
 //		String maxThreads = CommonLauncher.getProperty("maxThreads", maxThreads_);
 //		int p = Integer.parseInt(maxThreads.trim());
 //		return p;
-		return _getIntProperty("maxThreads","200");
+		return _getIntProperty("web.maxThreads",200);
 	}
 
 	protected   int getIdleTimeout(){
-		return _getIntProperty("idleTimeout","30000");
+		return _getIntProperty("web.idleTimeout",30000);
 //		String idleTimeout_ = System.getProperty("idleTimeout","30000");
 //		String idleTimeout = CommonLauncher.getProperty("idleTimeout", idleTimeout_);
 //		int p = Integer.parseInt(idleTimeout.trim());
@@ -86,7 +86,7 @@ public abstract class BaseApplicationStart {
 //		String contextPath_ = System.getProperty("contextPath","");
 //		String contextPath = CommonLauncher.getProperty("contextPath",
 //				contextPath_);
-		String contextPath = _getStringProperty("contextPath","");
+		String contextPath = _getStringProperty("web.contextPath","");
 		if (contextPath.equals(""))
 			;
 		else if(!contextPath.startsWith("/")){
@@ -99,7 +99,7 @@ public abstract class BaseApplicationStart {
 //		String docBase_ = System.getProperty("docBase","./WebRoot");
 //		String docBase = CommonLauncher.getProperty("docBase",docBase_);
 //		return docBase;
-		return _getStringProperty("docBase","./WebRoot");
+		return _getStringProperty("web.docBase","./WebRoot");
 	}
 	/**
 	 * 先从配置文件获取属性，如果配置文件中没有，则从系统jvm变量中取，如果系统变量中没有，则采用默认值
@@ -107,12 +107,20 @@ public abstract class BaseApplicationStart {
 	 * @param defaultValue
 	 * @return
 	 */
-	private int _getIntProperty(String propertyName,String defaultValue){
+	private int _getIntProperty(String propertyName,int defaultValue){
 
-		return CommonLauncher.getIntProperty(propertyName,defaultValue);
+		return PropertiesUtil.getPropertiesContainer().getIntSystemEnvProperty(propertyName,defaultValue);
 
 	}
-
+	/**
+	 * 先从配置文件获取属性，如果配置文件中没有，则从系统jvm变量中取，如果系统变量中没有，则采用默认值
+	 * @param propertyName
+	 * @param defaultValue
+	 * @return
+	 */
+	private boolean _getBooleanProperty(String propertyName,boolean defaultValue){
+		return PropertiesUtil.getPropertiesContainer().getBooleanSystemEnvProperty(propertyName,defaultValue);
+	}
 	/**
 	 * 先从配置文件获取属性，如果配置文件中没有，则从系统jvm变量中取，如果系统变量中没有，则采用默认值
 	 * @param propertyName
@@ -120,7 +128,7 @@ public abstract class BaseApplicationStart {
 	 * @return
 	 */
 	private String _getStringProperty(String propertyName,String defaultValue){
-		return CommonLauncher.getProperty(propertyName,defaultValue);
+		return PropertiesUtil.getPropertiesContainer().getSystemEnvProperty(propertyName,defaultValue);
 	}
 	public abstract  String getServerType();
 
@@ -130,15 +138,24 @@ public abstract class BaseApplicationStart {
 //		int p = Integer.parseInt(port.trim());
 //		return p;
 
-		return _getIntProperty("port","8080");
+		return _getIntProperty("web.port",8080);
 	}
 	public   String getHost(){
 //		String host_ = System.getProperty("host","127.0.0.1");
 //		String host = CommonLauncher.getProperty("host",host_);
 //		return host;
 
-		return _getStringProperty("host","127.0.0.1");
+		return _getStringProperty("web.host","127.0.0.1");
 	}
+
+	public   boolean getScanManifest(){
+//		String host_ = System.getProperty("host","127.0.0.1");
+//		String host = CommonLauncher.getProperty("host",host_);
+//		return host;
+
+		return _getBooleanProperty("web.scanManifest",false);
+	}
+
 	protected abstract void startContainer(ApplicationBootContext applicationBootContext)  throws Exception;
 	protected abstract void afterStartContainer(ApplicationBootContext applicationBootContext)  throws Exception;
 	public void start() {
