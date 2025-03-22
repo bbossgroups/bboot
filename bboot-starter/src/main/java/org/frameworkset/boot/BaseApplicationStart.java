@@ -145,7 +145,7 @@ public abstract class BaseApplicationStart {
 //		String host = CommonLauncher.getProperty("host",host_);
 //		return host;
 
-		return _getStringProperty("web.host","127.0.0.1");
+		return _getStringProperty("web.host","0.0.0.0");
 	}
 
 	public   boolean getScanManifest(){

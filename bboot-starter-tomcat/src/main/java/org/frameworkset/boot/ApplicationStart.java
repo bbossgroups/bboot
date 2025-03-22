@@ -58,6 +58,7 @@ public class ApplicationStart extends BaseApplicationStart{
 //		tomcat.setBaseDir(applicationBootContext.getDocBase());
 
 		Connector connector = new Connector(PROP_PROTOCOL);
+        connector.setProperty("address", applicationBootContext.getHost());
 		connector.setPort(getPort());
 		connector.setURIEncoding(DEFAULT_CHARSET);
 

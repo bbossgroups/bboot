@@ -30,18 +30,125 @@
 	dependencies {
 		api project(':bboot-starter')
 
+        // Jetty 11 核心依赖
+ 
+        // 排除旧版 SLF4J 绑定（如有必要）
+//        configurations.all {
+//            exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+//            exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+////            org.slf4j:slf4j-api:2.0.16
+//            exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'  // 排除旧版桥接
+//        }
+        api (
+
+                [group: 'org.eclipse.jetty', name: 'jetty-annotations', version: "${jetty_version_jsp}", transitive: true],
+
+
+        )
+                {
+                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+                    exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+//            org.slf4j:slf4j-api:2.0.16
+                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+                    exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
+                    exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
+                }
 		api (
 
-				[group: 'org.eclipse.jetty', name: 'jetty-server', version: "${jetty_version}", transitive: true],
-				[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: "${jetty_version}", transitive: true],
-				[group: 'org.eclipse.jetty', name: 'jetty-jmx', version: "${jetty_version}", transitive: true],
-				[group: 'org.eclipse.jetty', name: 'jetty-servlets', version: "${jetty_version}", transitive: true],
-				[group: 'org.eclipse.jetty.websocket', name: 'javax-websocket-server-impl', version: "${jetty_version}", transitive: true],
-				[group: 'org.eclipse.jetty', name: 'apache-jsp', version: "${jetty_version}", transitive: true],
-				[group: 'org.eclipse.jetty', name: 'apache-jstl', version: "${jetty_version}", transitive: true],
+				[group: 'org.eclipse.jetty', name: 'apache-jstl', version: "${jetty_version_jstl}", transitive: true],
 
 
 		)
+        {
+            exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+            exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+//            org.slf4j:slf4j-api:2.0.16
+            exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+            exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
+            exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
+        }
+
+        api (
+
+                [group: 'org.eclipse.jetty', name: 'jetty-server', version: "${jetty_version_server}", transitive: true],
+
+
+        )
+                {
+                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+                    exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+//            org.slf4j:slf4j-api:2.0.16
+                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+                }
+
+        api (
+
+                [group: 'org.eclipse.jetty', name: 'jetty-webapp', version: "${jetty_version_jsp}", transitive: true],
+
+
+        )
+                {
+                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+                    exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+//            org.slf4j:slf4j-api:2.0.16
+                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+                    exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
+                    exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
+                }
+        api (
+
+                [group: 'org.eclipse.jetty', name: 'jetty-jmx', version: "${jetty_version_server}", transitive: true],
+
+
+        )
+                {
+                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+                    exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+//            org.slf4j:slf4j-api:2.0.16
+                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+                    exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
+                    exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
+                }
+        api (
+
+                [group: 'org.eclipse.jetty', name: 'jetty-servlets', version: "${jetty_version_jsp}", transitive: true],
+
+
+        )
+                {
+                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+                    exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+//            org.slf4j:slf4j-api:2.0.16
+                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+                    exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
+                    exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
+                }
+//        api (
+//
+//                [group: 'org.eclipse.jetty.websocket', name: 'javax-websocket-server-impl', version: "${jetty_version_websocket}", transitive: true],
+//
+//
+//        )
+//                {
+//                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+//                    exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+////            org.slf4j:slf4j-api:2.0.16
+//                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+//                }
+        api (
+
+                [group: 'org.eclipse.jetty', name: 'apache-jsp', version: "${jetty_version_jsp}", transitive: true],
+
+
+        )
+                {
+                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // 排除旧版绑定
+                    exclude group: 'org.slf4j', module: 'slf4j-api'  // 排除旧版绑定
+//            org.slf4j:slf4j-api:2.0.16
+                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+                    exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
+                    exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
+                }
 	}
 
 

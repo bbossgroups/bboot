@@ -1,12 +1,16 @@
 package org.frameworkset.boot;
 
+//import org.eclipse.jetty.annotations.AnnotationConfiguration;
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+
+import org.eclipse.jetty.util.resource.ResourceFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.webapp.Configuration;
+import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +30,7 @@ public class ApplicationStart extends BaseApplicationStart{
 	@Override
 	protected void startContainer(ApplicationBootContext applicationBootContext)  throws Exception{
 		QueuedThreadPool threadPool = new QueuedThreadPool();
+        org.eclipse.jetty.server.handler.ContextHandler s;
 		threadPool.setIdleTimeout(getThreadPoolIdleTimeout());
 		threadPool.setMinThreads(getMinThreads());
 		threadPool.setMaxThreads(getMaxThreads());
@@ -36,13 +41,32 @@ public class ApplicationStart extends BaseApplicationStart{
 		connector.setIdleTimeout(getIdleTimeout());
 		server.setConnectors(new Connector[]{connector});
 
-		// 关联一个已经存在的上下文
-		WebAppContext context = new WebAppContext();
+		
 		// 设置描述符位置
 		//context.setDescriptor("./"+webroot+"/WEB-INF/web.xml");
 		// 设置Web内容上下文路径
+// 关联一个已经存在的上下文
+        WebAppContext context = new WebAppContext();
+        // 设置资源路径
+        context.setBaseResource(context.newResource(applicationBootContext.getDocBase()));
 
-		context.setResourceBase(applicationBootContext.getDocBase());
+        // 启用注解扫描（兼容 Jakarta EE 10）
+//        context.addConfiguration(
+//                new JettyWebXmlConfiguration(),new AnnotationConfiguration() // Jetty 12 的注解配置类
+//        );
+
+        context.addConfiguration(
+                new JettyWebXmlConfiguration(),new AnnotationConfiguration() // Jetty 12 的注解配置类
+        );
+////        context.setResourceBase(applicationBootContext.getDocBase());
+//        // This webapp will use jsps and jstl. We need to enable the
+//        // AnnotationConfiguration in order to correctly
+//        // set up the jsp container
+//        Configuration.ClassList classlist = Configuration.ClassList
+//                .setServerDefault( server );
+//        classlist.addBefore(
+//                "org.eclipse.jetty.webapp.JettyWebXmlConfiguration",
+//                "org.eclipse.jetty.annotations.AnnotationConfiguration" );
 		// 设置上下文路径
 		context.setContextPath(applicationBootContext.getContext());
 		context.setParentLoaderPriority(true);
@@ -51,14 +75,7 @@ public class ApplicationStart extends BaseApplicationStart{
 
 		contexts.setHandlers(new Handler[] { context });
 
-		// This webapp will use jsps and jstl. We need to enable the
-		// AnnotationConfiguration in order to correctly
-		// set up the jsp container
-		Configuration.ClassList classlist = Configuration.ClassList
-				.setServerDefault( server );
-		classlist.addBefore(
-				"org.eclipse.jetty.webapp.JettyWebXmlConfiguration",
-				"org.eclipse.jetty.annotations.AnnotationConfiguration" );
+		
 
 		// Set the ContainerIncludeJarPattern so that jetty examines these
 		// container-path jars for tlds, web-fragments etc.
