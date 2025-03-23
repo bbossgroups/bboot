@@ -47,11 +47,19 @@ public class ApplicationStart extends BaseApplicationStart{
 		}
 		return result;
 	}
-
+    protected   String getDocBase(){
+//		String docBase_ = System.getProperty("docBase","./WebRoot");
+//		String docBase = CommonLauncher.getProperty("docBase",docBase_);
+//		return docBase;
+        String docBase = new File("WebRoot").getAbsolutePath();
+        log.info("Default docbase:{}",docBase);
+        return _getStringProperty("web.docBase",docBase);
+    }
 	@Override
 	protected void startContainer(ApplicationBootContext applicationBootContext)  throws Exception{
 
-
+        // 在启动代码前添加日志配置
+//        System.setProperty("org.apache.catalina.level", "WARNING");
 		tomcat = new Tomcat();
 //		tomcat.setPort(this.getPort());
 		tomcat.setBaseDir(".");
@@ -73,10 +81,11 @@ public class ApplicationStart extends BaseApplicationStart{
 
 		this.tomcat.setHostname(getHost());
 		this.tomcat.getEngine().setBackgroundProcessorDelay(30);
-
 		tomcat.getHost().setAutoDeploy(false);
-		tomcat.getHost().setAppBase(getDocBase());
+		tomcat.getHost().setAppBase(applicationBootContext.getDocBase());
 		String contextPath = applicationBootContext.getContext();
+        if(contextPath == null || contextPath.equals("/"))
+            contextPath = "";
 		StandardContext context = new StandardContext();
 		context.setParentClassLoader(Thread.currentThread().getContextClassLoader());
 		context.setPath(contextPath);
@@ -102,7 +111,6 @@ public class ApplicationStart extends BaseApplicationStart{
 //		context.setResources(resources);
 		((StandardJarScanner)context.getJarScanner()).setScanManifest(getScanManifest());
 		tomcat.getHost().addChild(context);
-
 
 
 

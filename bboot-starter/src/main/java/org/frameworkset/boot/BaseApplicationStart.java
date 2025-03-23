@@ -127,7 +127,7 @@ public abstract class BaseApplicationStart {
 	 * @param defaultValue
 	 * @return
 	 */
-	private String _getStringProperty(String propertyName,String defaultValue){
+	protected String _getStringProperty(String propertyName,String defaultValue){
 		return PropertiesUtil.getPropertiesContainer().getSystemEnvProperty(propertyName,defaultValue);
 	}
 	public abstract  String getServerType();
