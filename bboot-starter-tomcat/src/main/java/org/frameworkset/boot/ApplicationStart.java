@@ -19,6 +19,9 @@ import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ApplicationStart extends BaseApplicationStart{
 	private static Logger log = LoggerFactory.getLogger(ApplicationStart.class);
@@ -92,7 +95,9 @@ public class ApplicationStart extends BaseApplicationStart{
 		context.setDelegate(false);
 		context.setDocBase(applicationBootContext.getDocBase());
 		context.setAltDDName(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
+     
 
+        context.setWorkDir(applicationBootContext.getWorkTempDir());
 		context.setConfigFile(getWebappConfigFileFromDirectory(new File(applicationBootContext.getDocBase())));
 		ContextConfig contextConfig = new ContextConfig();
 

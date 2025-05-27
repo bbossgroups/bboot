@@ -34,7 +34,7 @@ public interface ApplicationBootContext {
 	public void setServerStatus(String serverStatus) ;
 
 	public String getDocBase() ;
-
+    public String getWorkTempDir();
 	public void setDocBase(String docBase);
 	public String getHost();
 

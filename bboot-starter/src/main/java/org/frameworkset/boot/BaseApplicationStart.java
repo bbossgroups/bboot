@@ -1,11 +1,16 @@
 package org.frameworkset.boot;
 
 import org.frameworkset.boot.event.ApplicationListener;
+import org.frameworkset.runtime.CommonLauncher;
+import org.frameworkset.runtime.OSInfo;
 import org.frameworkset.spi.assemble.PropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,13 +47,14 @@ public abstract class BaseApplicationStart {
 
 	}
 
-	protected    ApplicationBootContext buildApplicationBootContext(String context,int port,File appdir,String docBase,String host){
+	protected    ApplicationBootContext buildApplicationBootContext(String context,int port,File appdir,String docBase,String host,String workTempDir){
 		DefaultApplicationBootContext applicationBootContext = new DefaultApplicationBootContext();
 		applicationBootContext.setAppdir(appdir);
 		applicationBootContext.setContext(context);
 		applicationBootContext.setPort(port);
 		applicationBootContext.setHost(host);
 		applicationBootContext.setDocBase(docBase);
+        applicationBootContext.setWorkTempDir(workTempDir);
 		return applicationBootContext;
 	}
 	protected   int getThreadPoolIdleTimeout(){
@@ -101,6 +107,10 @@ public abstract class BaseApplicationStart {
 //		return docBase;
 		return _getStringProperty("web.docBase","./WebRoot");
 	}
+    
+    protected String getWorkTempDir(){
+        return _getStringProperty("web.workTempDir","./temp");
+    }
 	/**
 	 * 先从配置文件获取属性，如果配置文件中没有，则从系统jvm变量中取，如果系统变量中没有，则采用默认值
 	 * @param propertyName
@@ -158,6 +168,59 @@ public abstract class BaseApplicationStart {
 
 	protected abstract void startContainer(ApplicationBootContext applicationBootContext)  throws Exception;
 	protected abstract void afterStartContainer(ApplicationBootContext applicationBootContext)  throws Exception;
+ 
+
+
+    private static File computeApplicationDir(URL location, File defaultDir) {
+
+        if (location == null) {
+            log.warn("Warning: Cannot locate the program directory. Assuming default.");
+            return defaultDir;
+        }
+        if (!"file".equalsIgnoreCase(location.getProtocol())) {
+            log.warn("Warning: Unrecognized location type. Assuming default.");
+            return new File(".");
+        }
+        String file = location.getFile();
+        if (!file.endsWith(".jar") && !file.endsWith(".zip")) {
+            try {
+                return (new File(URLDecoder.decode(location.getFile(), "UTF-8"))).getParentFile();
+            } catch (UnsupportedEncodingException e) {
+
+            }
+
+            log.warn("Warning: Unrecognized location type. Assuming default.");
+            return new File(location.getFile());
+        } else {
+
+            try {
+                File path = null;// new
+                // File(URLDecoder.decode(location.toExternalForm().substring(6),
+                // "UTF-8")).getParentFile();
+                // if(!CommonLauncher.isLinux() && !CommonLauncher.isOSX())
+                if (OSInfo.isWindows()) {
+                    path = new File(URLDecoder.decode(location.toExternalForm().substring(6), "UTF-8")).getParentFile();
+                } else {
+                    path = new File(URLDecoder.decode(location.toExternalForm().substring(5), "UTF-8")).getParentFile();
+                }
+                // System.out.println("path: " + path.getAbsolutePath());
+                // System.out.println("location: " + location.getPath());
+                // System.out.println("external from location: " +
+                // URLDecoder.decode(location.toExternalForm().substring(6),
+                // "UTF-8"));
+                // System.out.println("external from location + 6: " +
+                // URLDecoder.decode(location.toExternalForm(), "UTF-8"));
+
+                return path;
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+               log.error("",e);
+            }
+        }
+
+        log.warn("Warning: Unrecognized location type. Assuming default.");
+        return new File(location.getFile());
+    }
 	public void start() {
 
 		ApplicationBootContext applicationBootContext = null;
@@ -165,14 +228,17 @@ public abstract class BaseApplicationStart {
 			initApplicationListeners();
 			// 服务器的监听端口
 
-
+           
 			String contextPath = getContextPath();
 
 			String docBase = getDocBase();
+            String workTempDir = getWorkTempDir();
+            log.info("workTempDir:{}",workTempDir);
 			int port = getPort();
 			String host = this.getHost();
 			log.info("start "+getServerType()+" server on "+host+":"+port+ " with contextpath "+contextPath);
-			applicationBootContext = buildApplicationBootContext(  contextPath,  port,  appdir,docBase,host);
+            
+			applicationBootContext = buildApplicationBootContext(  contextPath,  port,  appdir,docBase,host,workTempDir);
 
 			beforeStartHandler(  applicationBootContext);
 			startContainer(applicationBootContext);

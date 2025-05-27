@@ -22,11 +22,21 @@ public class DefaultApplicationBootContext implements ApplicationBootContext {
 	private File appdir;
 	private String docBase;
 	private String serverStatus ;
+
+
+    private String workTempDir;
 	private String host;
 	public String getContext() {
 		return context;
 	}
 
+    public String getWorkTempDir() {
+        return workTempDir;
+    }
+
+    public void setWorkTempDir(String workTempDir) {
+        this.workTempDir = workTempDir;
+    }
 	public String getDocBase() {
 		return docBase;
 	}

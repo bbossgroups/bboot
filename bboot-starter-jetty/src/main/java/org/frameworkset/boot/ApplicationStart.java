@@ -1,6 +1,7 @@
 package org.frameworkset.boot;
 
 //import org.eclipse.jetty.annotations.AnnotationConfiguration;
+import com.frameworkset.util.SimpleStringUtil;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
@@ -14,6 +15,11 @@ import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ApplicationStart extends BaseApplicationStart{
 	private static Logger log = LoggerFactory.getLogger(ApplicationStart.class);
@@ -49,7 +55,12 @@ public class ApplicationStart extends BaseApplicationStart{
         WebAppContext context = new WebAppContext();
         // 设置资源路径
         context.setBaseResource(context.newResource(applicationBootContext.getDocBase()));
+        
+ 
 
+//        String tempDirectory = SimpleStringUtil.getPath(applicationBootContext.getDocBase(),"/temp");
+//        log.info("tempDirectory:"+tempDirectory);
+        context.setTempDirectory(new File(applicationBootContext.getWorkTempDir()));
         // 启用注解扫描（兼容 Jakarta EE 10）
 //        context.addConfiguration(
 //                new JettyWebXmlConfiguration(),new AnnotationConfiguration() // Jetty 12 的注解配置类

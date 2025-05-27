@@ -1,13 +1,12 @@
 #bboss booter
 基于bboss booter容器，内置jetty容器和tomcat容器
 部署运行时可以在config.properties中可以配置应用访问上下文和端口
-contextPath=demoproject 
-port=8080
+web.contextPath=gencode
+#web.host=0.0.0.0
+web.port=80
+web.workTempDir=c:/workspace/bbossgroups/bbootdemo/temp
+web.docBase=c:/workspace/bbossgroups/bbootdemo/WebRoot
 
-开发调试实时通过jvm参数设置docBase/contextPaht/port：
--DdocBase=E:/workspace/bbossgroups/bbootdemo/WebRoot 
--DcontextPath=demoproject 
--Dport=8080
 
 # 版本构建方法
 
@@ -30,12 +29,12 @@ maven坐标
 <dependency>
   <groupId>com.bbossgroups.boot</groupId>
   <artifactId>bboot-starter-jetty</artifactId>
-  <version>5.0.3.8.0</version>
+  <version>6.3.2</version>
 </dependency>
 
 gradle坐标
 
-compile 'com.bbossgroups.boot:bboot-starter-jetty:5.0.3.8.0'
+compile 'com.bbossgroups.boot:bboot-starter-jetty:6.3.2'
 
 ## 工程中导入bboot-starter-tomcat
 maven坐标
@@ -43,13 +42,13 @@ maven坐标
 <dependency>
   <groupId>com.bbossgroups.boot</groupId>
   <artifactId>bboot-starter-tomcat</artifactId>
-  <version>5.0.3.8.0</version>
+  <version>6.3.2</version>
 </dependency>
 ''''
 
 gradle坐标
 
-compile 'com.bbossgroups.boot:bboot-starter-tomcat:5.0.3.8.0'
+compile 'com.bbossgroups.boot:bboot-starter-tomcat:6.3.2'
 
 
 
