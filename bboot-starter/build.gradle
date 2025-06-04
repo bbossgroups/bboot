@@ -71,7 +71,8 @@
 		api (
 
 
-				[group: 'com.bbossgroups', name: 'bboss-taglib', version: "${bboss_version}", transitive: false],
+				[group: 'com.bbossgroups', name: 'bboss-tabpane', version: "${bboss_version}", transitive: false],
+                [group: 'com.bbossgroups', name: 'bboss-taglib', version: "${bboss_version}", transitive: false],
 				[group: 'com.bbossgroups', name: 'bboss-htmlparser', version: "${bboss_version}", transitive: false],
 				[group: 'commons-fileupload', name: 'commons-fileupload', version: '1.5', transitive: false],
 				[group: 'commons-io', name: 'commons-io', version: '2.4', transitive: false],
