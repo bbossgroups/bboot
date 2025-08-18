@@ -51,7 +51,9 @@
 //            org.slf4j:slf4j-api:2.0.16
                     exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
                     exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
-                    exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
+                    exclude group: 'org.eclipse.jetty.websocket'
+                    exclude group: 'org.ow2.asm', module: 'asm-commons' // 按需排除其他冲突模块
+                    exclude group: 'org.ow2.asm', module: 'asm' // 按需排除其他冲突模块
                 }
 		api (
 
