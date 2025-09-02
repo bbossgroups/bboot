@@ -69,10 +69,18 @@
             exclude group: 'org.eclipse.jetty', module: 'jetty-server'  // 防止旧版本覆盖
             exclude group: 'org.eclipse.jetty.websocket'                // 按需排除其他冲突模块
         }
+        api (
+                [group: 'org.eclipse.jetty.websocket', name: 'websocket-jetty-server', version: jetty_version_server, transitive: true],
+        )
+                {
+                    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+                    exclude group: 'org.slf4j', module: 'slf4j-api'
+                    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+                }
 
         api (
 
-                [group: 'org.eclipse.jetty', name: 'jetty-server', version: "${jetty_version_server}", transitive: true],
+                [group: 'org.eclipse.jetty', name: 'jetty-server', version: jetty_version_server, transitive: true],
 
 
         )
@@ -99,7 +107,7 @@
                 }
         api (
 
-                [group: 'org.eclipse.jetty', name: 'jetty-jmx', version: "${jetty_version_server}", transitive: true],
+                [group: 'org.eclipse.jetty', name: 'jetty-jmx', version: jetty_version_server, transitive: true],
 
 
         )
