@@ -165,6 +165,12 @@ public abstract class BaseApplicationStart {
 
 		return _getBooleanProperty("web.scanManifest",false);
 	}
+    
+    public boolean isUpgradeProtocol() {
+        return _getBooleanProperty("web.upgradeProtocol",false);
+    }
+
+  
 
 	protected abstract void startContainer(ApplicationBootContext applicationBootContext)  throws Exception;
 	protected abstract void afterStartContainer(ApplicationBootContext applicationBootContext)  throws Exception;
@@ -240,6 +246,7 @@ public abstract class BaseApplicationStart {
             
 			applicationBootContext = buildApplicationBootContext(  contextPath,  port,  appdir,docBase,host,workTempDir);
 
+            applicationBootContext.setUpgradeProtocol(isUpgradeProtocol());
 			beforeStartHandler(  applicationBootContext);
 			startContainer(applicationBootContext);
 			log.info("http://"+host+":"+port+contextPath);

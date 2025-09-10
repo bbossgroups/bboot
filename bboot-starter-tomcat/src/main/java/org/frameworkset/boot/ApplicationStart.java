@@ -1,16 +1,14 @@
 package org.frameworkset.boot;
 
 
-import org.apache.catalina.Context;
-import org.apache.catalina.Lifecycle;
-import org.apache.catalina.LifecycleEvent;
-import org.apache.catalina.LifecycleListener;
+import org.apache.catalina.*;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.core.StandardThreadExecutor;
 import org.apache.catalina.startup.Constants;
 import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.coyote.http2.Http2Protocol;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +17,6 @@ import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ApplicationStart extends BaseApplicationStart{
 	private static Logger log = LoggerFactory.getLogger(ApplicationStart.class);
@@ -63,12 +58,15 @@ public class ApplicationStart extends BaseApplicationStart{
 
         // 在启动代码前添加日志配置
 //        System.setProperty("org.apache.catalina.level", "WARNING");
+//        Registry.disableRegistry();
 		tomcat = new Tomcat();
 //		tomcat.setPort(this.getPort());
 		tomcat.setBaseDir(".");
 //		tomcat.setBaseDir(applicationBootContext.getDocBase());
 
 		Connector connector = new Connector(PROP_PROTOCOL);
+        connector.setThrowOnFailure(true);
+        connector.addUpgradeProtocol(new Http2Protocol());
         connector.setProperty("address", applicationBootContext.getHost());
 		connector.setPort(getPort());
 		connector.setURIEncoding(DEFAULT_CHARSET);
@@ -100,11 +98,10 @@ public class ApplicationStart extends BaseApplicationStart{
         context.setWorkDir(applicationBootContext.getWorkTempDir());
 		context.setConfigFile(getWebappConfigFileFromDirectory(new File(applicationBootContext.getDocBase())));
 		ContextConfig contextConfig = new ContextConfig();
-
+        contextConfig.setDefaultWebXml(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
 		context.addLifecycleListener(contextConfig );
 		context.addLifecycleListener(new Tomcat.DefaultWebXmlListener());
 		context.addLifecycleListener(new Tomcat.FixContextListener());
-
 //		context.addLifecycleListener(new StoreMergedWebXmlListener(applicationBootContext));
 //		context.setDefaultWebXml(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
 //		context.addWatchedResource(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");

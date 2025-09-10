@@ -17,26 +17,29 @@ package org.frameworkset.boot;/*
 import java.io.File;
 
 public interface ApplicationBootContext {
-	public final int __FAILED = -1;
-	public final int __STOPPED = 0;
-	public final int __STARTING = 1;
-	public final int __STARTED = 2;
-	public final int __STOPPING = 3;
+	final int __FAILED = -1;
+	final int __STOPPED = 0;
+	final int __STARTING = 1;
+	final int __STARTED = 2;
+	final int __STOPPING = 3;
 
-	public String getContext();
-
-
-	public int getPort() ;
+	String getContext();
 
 
-	public File getAppdir() ;
-	public String getServerStatus() ;
-	public void setServerStatus(String serverStatus) ;
+	int getPort() ;
 
-	public String getDocBase() ;
-    public String getWorkTempDir();
-	public void setDocBase(String docBase);
-	public String getHost();
 
-	public void setHost(String host);
+	File getAppdir() ;
+	String getServerStatus() ;
+	void setServerStatus(String serverStatus) ;
+
+	String getDocBase() ;
+    String getWorkTempDir();
+	void setDocBase(String docBase);
+	String getHost();
+
+	void setHost(String host);
+    boolean isUpgradeProtocol();
+
+    void setUpgradeProtocol(boolean upgradeProtocol) ;
 }

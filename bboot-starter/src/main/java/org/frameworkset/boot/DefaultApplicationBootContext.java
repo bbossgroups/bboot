@@ -26,6 +26,8 @@ public class DefaultApplicationBootContext implements ApplicationBootContext {
 
     private String workTempDir;
 	private String host;
+    
+    private boolean upgradeProtocol ;
 	public String getContext() {
 		return context;
 	}
@@ -76,4 +78,12 @@ public class DefaultApplicationBootContext implements ApplicationBootContext {
 	public void setServerStatus(String serverStatus) {
 		this.serverStatus = serverStatus;
 	}
+
+    public boolean isUpgradeProtocol() {
+        return upgradeProtocol;
+    }
+
+    public void setUpgradeProtocol(boolean upgradeProtocol) {
+        this.upgradeProtocol = upgradeProtocol;
+    }
 }
