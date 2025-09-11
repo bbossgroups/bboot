@@ -97,7 +97,7 @@ public class ApplicationStart extends BaseApplicationStart{
 
         context.setWorkDir(applicationBootContext.getWorkTempDir());
 		context.setConfigFile(getWebappConfigFileFromDirectory(new File(applicationBootContext.getDocBase())));
-		ContextConfig contextConfig = new ContextConfig();
+		ContextConfig contextConfig = new BBossContextConfig();
         contextConfig.setDefaultWebXml(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
 		context.addLifecycleListener(contextConfig );
 		context.addLifecycleListener(new Tomcat.DefaultWebXmlListener());
