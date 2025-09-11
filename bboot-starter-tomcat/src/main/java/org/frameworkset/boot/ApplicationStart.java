@@ -9,6 +9,7 @@ import org.apache.catalina.startup.Constants;
 import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.coyote.http2.Http2Protocol;
+import org.apache.tomcat.util.scan.StandardJarScanFilter;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,25 @@ public class ApplicationStart extends BaseApplicationStart{
         log.info("Default docbase:{}",docBase);
         return _getStringProperty("web.docBase",docBase);
     }
+
+    private void skipAllTldScanning(StandardContext context) {
+        StandardJarScanFilter filter = new StandardJarScanFilter();
+        filter.setTldSkip("*.jar");
+        context.getJarScanner().setJarScanFilter(filter);
+    }
+
+    public void customize(StandardContext standardContext) {
+        
+        try {
+            standardContext.setClearReferencesObjectStreamClassCaches(false);
+            standardContext.setClearReferencesRmiTargets(false);
+            standardContext.setClearReferencesThreadLocals(false);
+        }
+        catch (NoSuchMethodError ex) {
+            // Earlier version of Tomcat (probably without
+            // setClearReferencesThreadLocals). Continue.
+        }
+    }
 	@Override
 	protected void startContainer(ApplicationBootContext applicationBootContext)  throws Exception{
 
@@ -93,7 +113,7 @@ public class ApplicationStart extends BaseApplicationStart{
 		context.setDelegate(false);
 		context.setDocBase(applicationBootContext.getDocBase());
 		context.setAltDDName(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
-     
+
 
         context.setWorkDir(applicationBootContext.getWorkTempDir());
 		context.setConfigFile(getWebappConfigFileFromDirectory(new File(applicationBootContext.getDocBase())));
@@ -102,6 +122,7 @@ public class ApplicationStart extends BaseApplicationStart{
 		context.addLifecycleListener(contextConfig );
 		context.addLifecycleListener(new Tomcat.DefaultWebXmlListener());
 		context.addLifecycleListener(new Tomcat.FixContextListener());
+       
 //		context.addLifecycleListener(new StoreMergedWebXmlListener(applicationBootContext));
 //		context.setDefaultWebXml(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
 //		context.addWatchedResource(applicationBootContext.getDocBase()+"/WEB-INF/web.xml");
@@ -112,7 +133,10 @@ public class ApplicationStart extends BaseApplicationStart{
 //				applicationBootContext.getDocBase(), "/"));
 //		context.setResources(resources);
 		((StandardJarScanner)context.getJarScanner()).setScanManifest(getScanManifest());
-		tomcat.getHost().addChild(context);
+
+        skipAllTldScanning( context);
+        customize(context);
+        tomcat.getHost().addChild(context);
 
 
 
