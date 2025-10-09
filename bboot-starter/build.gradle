@@ -30,9 +30,9 @@
 	dependencies {
 
         api(
-                [group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${log4j2_version}", transitive: false],
-                [group: 'org.apache.logging.log4j', name: 'log4j-core', version: "${log4j2_version}", transitive: false],
-                [group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "${log4j2_version}", transitive: true],
+                [group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4j2_version, transitive: false],
+                [group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4j2_version, transitive: false],
+                [group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: log4j2_version, transitive: true],
         )
 		api (
 
@@ -76,7 +76,7 @@
                 [group: 'com.bbossgroups', name: 'bboss-taglib', version: "${bboss_version}", transitive: false],
 				[group: 'com.bbossgroups', name: 'bboss-htmlparser', version: "${bboss_version}", transitive: false],
 				[group: 'commons-fileupload', name: 'commons-fileupload', version: '1.5', transitive: false],
-				[group: 'commons-io', name: 'commons-io', version: '2.18.0', transitive: false],
+				[group: 'commons-io', name: 'commons-io', version: '2.20.0', transitive: false],
 				[group: 'jstl', name: 'jstl', version: '1.2', transitive: false],
 
 		)
