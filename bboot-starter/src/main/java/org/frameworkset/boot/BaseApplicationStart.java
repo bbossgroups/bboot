@@ -62,7 +62,7 @@ public abstract class BaseApplicationStart {
 //		String threadPoolIdleTimeout = CommonLauncher.getProperty("threadPoolIdleTimeout", threadPoolIdleTimeout_);
 //		int p = Integer.parseInt(threadPoolIdleTimeout.trim());
 //		return p;
-		return _getIntProperty("web.threadPoolIdleTimeout",60000);
+		return _getIntProperty("web.threadPoolIdleTimeout",600000);
 	}
 
 	protected   int getMinThreads(){
@@ -70,19 +70,21 @@ public abstract class BaseApplicationStart {
 //		String minThreads = CommonLauncher.getProperty("minThreads", minThreads_);
 //		int p = Integer.parseInt(minThreads.trim());
 //		return p;
-		return _getIntProperty("web.minThreads",10);
+		return _getIntProperty("web.minThreads",300);
 	}
-
+    protected int getMaxQueueSize(){
+        return _getIntProperty("web.maxQueueSize",1000);
+    }
 	protected   int getMaxThreads(){
 //		String maxThreads_ = System.getProperty("maxThreads","200");
 //		String maxThreads = CommonLauncher.getProperty("maxThreads", maxThreads_);
 //		int p = Integer.parseInt(maxThreads.trim());
 //		return p;
-		return _getIntProperty("web.maxThreads",200);
+		return _getIntProperty("web.maxThreads",600);
 	}
 
 	protected   int getIdleTimeout(){
-		return _getIntProperty("web.idleTimeout",30000);
+		return _getIntProperty("web.idleTimeout",600000);
 //		String idleTimeout_ = System.getProperty("idleTimeout","30000");
 //		String idleTimeout = CommonLauncher.getProperty("idleTimeout", idleTimeout_);
 //		int p = Integer.parseInt(idleTimeout.trim());
@@ -313,5 +315,6 @@ public abstract class BaseApplicationStart {
 	public static void setAppdir(File appdir) {
 		BaseApplicationStart.appdir = appdir;
 	}
+
 
 }

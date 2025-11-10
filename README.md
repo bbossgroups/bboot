@@ -4,8 +4,19 @@
 web.contextPath=gencode
 #web.host=0.0.0.0
 web.port=80
+## 发布环境无需配置web.workTempDir，注释掉
 web.workTempDir=c:/workspace/bbossgroups/bbootdemo/temp
+## 发布环境无需配置web.docBase，注释掉
 web.docBase=c:/workspace/bbossgroups/bbootdemo/WebRoot
+
+#工作线程池-最大线程数据配置
+web.maxThreads=600
+#工作线程池-最小线程数据配置
+web.minThreads=300
+#工作线程池-线程空闲时间配置
+web.threadPoolIdleTimeout=60000
+web.maxQueueSize=1000
+
 
 
 # 版本构建方法

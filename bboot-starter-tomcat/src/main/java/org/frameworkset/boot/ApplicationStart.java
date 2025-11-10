@@ -95,6 +95,10 @@ public class ApplicationStart extends BaseApplicationStart{
 		this.tomcat.getService().addConnector(connector);
 		StandardThreadExecutor executor = new StandardThreadExecutor();
 		executor.setMaxThreads(this.getMaxThreads());
+        executor.setMaxIdleTime(this.getThreadPoolIdleTimeout());
+        executor.setMinSpareThreads(this.getMinThreads());
+        executor.setMaxQueueSize(this.getMaxQueueSize());
+//        executor.setThreadRenewalDelay(1000);
 
 		connector.getService().addExecutor(executor);
 

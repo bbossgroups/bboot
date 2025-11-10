@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.util.BlockingArrayQueue;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -28,11 +29,12 @@ public class ApplicationStart extends BaseApplicationStart{
 
 	@Override
 	protected void startContainer(ApplicationBootContext applicationBootContext)  throws Exception{
-		QueuedThreadPool threadPool = new QueuedThreadPool();
-        org.eclipse.jetty.server.handler.ContextHandler s;
-		threadPool.setIdleTimeout(getThreadPoolIdleTimeout());
-		threadPool.setMinThreads(getMinThreads());
-		threadPool.setMaxThreads(getMaxThreads());
+		QueuedThreadPool threadPool = new QueuedThreadPool(getMaxThreads(), getMinThreads(), 
+                getThreadPoolIdleTimeout(), 
+                new BlockingArrayQueue<>(this.getMaxQueueSize()));
+//		threadPool.setIdleTimeout(getThreadPoolIdleTimeout());
+//		threadPool.setMinThreads(getMinThreads());
+//		threadPool.setMaxThreads(getMaxThreads());
 		Server server = new Server(threadPool);
 		ServerConnector connector = new ServerConnector(server);
 		connector.setHost(applicationBootContext.getHost());
