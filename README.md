@@ -40,12 +40,12 @@ maven坐标
 <dependency>
   <groupId>com.bbossgroups.boot</groupId>
   <artifactId>bboot-starter-jetty</artifactId>
-  <version>6.3.5</version>
+  <version>6.3.7</version>
 </dependency>
 
 gradle坐标
 
-compile 'com.bbossgroups.boot:bboot-starter-jetty:6.3.5'
+compile 'com.bbossgroups.boot:bboot-starter-jetty:6.3.7'
 
 ## 工程中导入bboot-starter-tomcat
 maven坐标
@@ -53,13 +53,13 @@ maven坐标
 <dependency>
   <groupId>com.bbossgroups.boot</groupId>
   <artifactId>bboot-starter-tomcat</artifactId>
-  <version>6.3.5</version>
+  <version>6.3.7</version>
 </dependency>
 ''''
 
 gradle坐标
 
-compile 'com.bbossgroups.boot:bboot-starter-tomcat:6.3.5'
+compile 'com.bbossgroups.boot:bboot-starter-tomcat:6.3.7'
 
 
 
