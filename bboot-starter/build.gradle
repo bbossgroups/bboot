@@ -51,7 +51,8 @@
                 [group: 'org.ow2.asm', name: 'asm-tree', version: "${asm}", transitive: false],
                 [group: 'org.ow2.asm', name: 'asm-commons', version: "${asm}", transitive: false],
 				[group: 'com.bbossgroups.plugins', name: 'bboss-datatran-jdbc', version: bboss_es_version, transitive: true],
-
+                [group: 'com.bbossgroups', name: 'bboss-ai', version: bboss_ai_version, transitive: true],
+                
 		)
 		
 		api (
